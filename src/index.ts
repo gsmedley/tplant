@@ -38,7 +38,7 @@ G(<string>commander.input, {}, (err: Error | null, matches: string[]): void => {
         throw err;
     }
 
-    const tsConfigFile: string | undefined = findTsConfigFile(<string>commander.input, <string | undefined>commander.tsconfig);
+    const tsConfigFile: string | undefined = findTsConfigFile(<string>commander.input, <string | undefined>commander.project);
 
     const plantUMLDocument: string = tplant.convertToPlant(
         tplant.generateDocumentation(matches, getCompilerOptions(tsConfigFile)),
