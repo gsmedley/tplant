@@ -2,7 +2,7 @@
 
 // tslint:disable:no-console
 
-import commander from 'commander';
+import commander, { CommanderStatic } from 'commander';
 import fs from 'fs';
 import G from 'glob';
 import http from 'http';
@@ -34,15 +34,24 @@ if (!commander.input) {
     process.exit(1);
 }
 
-G(<string>commander.input, {}, (err: Error | null, matches: string[]): void => {
-    if (err !== null) {
-        throw err;
-    }
+let files: string[] = []
+
+if( Array.isArray(commander.input) ){
+    files = commander.input
+} else {
+    files = G.sync(<string>commander.input, {} )
+}
+
+tscToPlant(files, commander )
+
+
+
+function tscToPlant(files: string[], commander:  CommanderStatic) {
 
     const tsConfigFile: string | undefined = findTsConfigFile(<string>commander.input, <string | undefined>commander.project);
 
     const plantUMLDocument: string = tplant.convertToPlant(
-        tplant.generateDocumentation(matches, <boolean>commander.explicitInputsOnly, getCompilerOptions(tsConfigFile)),
+        tplant.generateDocumentation(files, <boolean>commander.explicitInputsOnly, getCompilerOptions(tsConfigFile)),
         {
             compositions: <boolean>commander.compositions,
             onlyInterfaces: <boolean>commander.onlyInterfaces
@@ -66,7 +75,7 @@ G(<string>commander.input, {}, (err: Error | null, matches: string[]): void => {
 
     // tslint:disable-next-line non-literal-fs-path
     fs.writeFileSync(<string>commander.output, plantUMLDocument, 'utf-8');
-});
+}
 
 function findTsConfigFile(inputPath: string, tsConfigPath?: string): string | undefined {
     if (tsConfigPath !== undefined) {
