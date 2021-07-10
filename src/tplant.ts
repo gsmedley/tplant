@@ -1,5 +1,6 @@
 import * as os from 'os';
 import ts from 'typescript';
+const path = require("path"); 
 import { Class } from './Components/Class';
 import { File } from './Components/File';
 import { Interface } from './Components/Interface';
@@ -19,6 +20,7 @@ export namespace tplant {
 
     export function generateDocumentation(
         fileNames: ReadonlyArray<string>,
+        explicitInputsOnly: boolean = false,
         options: ts.CompilerOptions = ts.getDefaultCompilerOptions()
     ): IComponentComposite[] {
 
@@ -30,13 +32,26 @@ export namespace tplant {
 
         const result: IComponentComposite[] = [];
 
+        const inputFilePaths = fileNames.map( fileName => path.resolve( fileName ))
+
         // Visit every sourceFile in the program
         program.getSourceFiles()
             .forEach((sourceFile: ts.SourceFile): void => {
                 if (!sourceFile.isDeclarationFile) {
-                    const file: IComponentComposite | undefined = FileFactory.create(sourceFile, checker);
-                    if (file !== undefined) {
-                        result.push(file);
+                    let skipFile = false
+                   
+                    if( explicitInputsOnly ){
+                        skipFile = !inputFilePaths.includes( path.resolve(sourceFile.fileName) ) 
+                        if( skipFile) {
+                            console.log( "Skipping: " + sourceFile.fileName )
+                        }                     
+                    }  
+
+                    if( !skipFile )  {               
+                        const file: IComponentComposite | undefined = FileFactory.create(sourceFile, checker);
+                        if (file !== undefined) {
+                            result.push(file);
+                        }
                     }
                 }
             });

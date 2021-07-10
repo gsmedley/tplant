@@ -26,6 +26,7 @@ commander
     )
     .option('-C, --compositions', 'Create not heritage compositions')
     .option('-I, --only-interfaces', 'Only output interfaces')
+    .option('-X, --explicit-inputs-only', 'generate output only for files explicitly included by --input')
     .parse(process.argv);
 
 if (!commander.input) {
@@ -41,7 +42,7 @@ G(<string>commander.input, {}, (err: Error | null, matches: string[]): void => {
     const tsConfigFile: string | undefined = findTsConfigFile(<string>commander.input, <string | undefined>commander.project);
 
     const plantUMLDocument: string = tplant.convertToPlant(
-        tplant.generateDocumentation(matches, getCompilerOptions(tsConfigFile)),
+        tplant.generateDocumentation(matches, <boolean>commander.explicitInputsOnly, getCompilerOptions(tsConfigFile)),
         {
             compositions: <boolean>commander.compositions,
             onlyInterfaces: <boolean>commander.onlyInterfaces
