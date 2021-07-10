@@ -37,22 +37,13 @@ export namespace tplant {
         // Visit every sourceFile in the program
         program.getSourceFiles()
             .forEach((sourceFile: ts.SourceFile): void => {
-                if (!sourceFile.isDeclarationFile) {
-                    let skipFile = false
-                   
-                    if( explicitInputsOnly ){
-                        skipFile = !inputFilePaths.includes( path.resolve(sourceFile.fileName) ) 
-                        if( skipFile) {
-                            console.log( "Skipping: " + sourceFile.fileName )
-                        }                     
-                    }  
-
-                    if( !skipFile )  {               
-                        const file: IComponentComposite | undefined = FileFactory.create(sourceFile, checker);
-                        if (file !== undefined) {
-                            result.push(file);
-                        }
-                    }
+                if (!sourceFile.isDeclarationFile &&
+                   (!explicitInputsOnly || inputFilePaths.includes( path.resolve(sourceFile.fileName)  ) )  ) {               
+                    
+                    const file: IComponentComposite | undefined = FileFactory.create(sourceFile, checker);
+                    if (file !== undefined) {
+                        result.push(file);
+                    }                
                 }
             });
 
