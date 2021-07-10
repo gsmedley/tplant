@@ -1,6 +1,6 @@
 import * as os from 'os';
+import path from 'path';
 import ts from 'typescript';
-const path = require("path"); 
 import { Class } from './Components/Class';
 import { File } from './Components/File';
 import { Interface } from './Components/Interface';
@@ -32,18 +32,18 @@ export namespace tplant {
 
         const result: IComponentComposite[] = [];
 
-        const inputFilePaths = fileNames.map( fileName => path.resolve( fileName ))
+        const inputFilePaths: string[] = fileNames.map((fileName: string) => path.resolve(fileName));
 
         // Visit every sourceFile in the program
         program.getSourceFiles()
             .forEach((sourceFile: ts.SourceFile): void => {
                 if (!sourceFile.isDeclarationFile &&
-                   (!explicitInputsOnly || inputFilePaths.includes( path.resolve(sourceFile.fileName)  ) )  ) {               
-                    
+                   (!explicitInputsOnly || inputFilePaths.includes(path.resolve(sourceFile.fileName)))) {
+
                     const file: IComponentComposite | undefined = FileFactory.create(sourceFile, checker);
                     if (file !== undefined) {
                         result.push(file);
-                    }                
+                    }
                 }
             });
 

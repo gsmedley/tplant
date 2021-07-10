@@ -2,7 +2,7 @@
 
 // tslint:disable:no-console
 
-import commander, { CommanderStatic } from 'commander';
+import commander from 'commander';
 import fs from 'fs';
 import G from 'glob';
 import http from 'http';
@@ -34,19 +34,17 @@ if (!commander.input) {
     process.exit(1);
 }
 
-let files: string[] = []
+let files: string[] = [];
 
-if( Array.isArray(commander.input) ){
-    files = commander.input
+if (Array.isArray(commander.input)) {
+    files = commander.input;
 } else {
-    files = G.sync(<string>commander.input, {} )
+    files = G.sync(<string>commander.input, {});
 }
 
-tscToPlant(files, commander )
+tscToPlant();
 
-
-
-function tscToPlant(files: string[], commander:  CommanderStatic) {
+function tscToPlant(): void {
 
     const tsConfigFile: string | undefined = findTsConfigFile(<string>commander.input, <string | undefined>commander.project);
 

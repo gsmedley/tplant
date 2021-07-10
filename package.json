@@ -10,13 +10,13 @@
     "uml",
     "cli"
   ],
-  "homepage": "https://github.com/bafolts/tplant#readme",
+  "homepage": "https://github.com/gsmedley/tplant#readme",
   "bugs": {
-    "url": "https://github.com/bafolts/tplant/issues"
+    "url": "https://github.com/gsmedley/tplant/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bafolts/tplant.git"
+    "url": "git+https://github.com/gsmedley/tplant.git"
   },
   "license": "ISC",
   "author": "Brian Folts",
