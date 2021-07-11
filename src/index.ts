@@ -34,13 +34,7 @@ if (!commander.input) {
     process.exit(1);
 }
 
-let files: string[] = [];
-
-if (Array.isArray(commander.input)) {
-    files = commander.input;
-} else {
-    files = G.sync(<string>commander.input, {});
-}
+let files = G.sync(<string>commander.input, {});
 
 tscToPlant();
 
