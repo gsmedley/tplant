@@ -1,4 +1,4 @@
-export class Greeter {
+export default class Greeter {
     greeting: string;
     prefix: string = "Hello, ";
     constructor(message: string) {
